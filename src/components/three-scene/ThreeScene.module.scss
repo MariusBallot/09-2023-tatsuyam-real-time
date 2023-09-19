@@ -1,6 +1,35 @@
-.three_scene_container{
+.three_scene_container {
+    transition: all .5s .5s;
+
     max-width: 100%;
     width: 100vw;
     height: 100vh;
+    position: relative;
+    opacity: 0;
+    transform: translateY(50px);
+
+    &.on {
+        opacity: 1;
+        transform: translateY(0px);
+
+    }
+}
+
+.backdrop {
+    transition: all .5s;
+    width: 400px;
+    height: 400px;
+    opacity: 0;
+    border-radius: 50px;
     background: #8A898E;
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+
+    &.on {
+        width: 600px;
+        height: 600px;
+        opacity: 1;
+    }
 }

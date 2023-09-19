@@ -8,8 +8,10 @@ type Corner = {
 
 class Structure {
     private scene: THREE.Scene | undefined;
-    private glbLoader: GLTFLoader | undefined;
+    private glbLoader: GLTFLoader;
+    private texLoader: THREE.TextureLoader;
     private structureGroup: THREE.Group;
+    private rotator: THREE.Group;
     private corners: Corner[];
     private pieces: THREE.Mesh[];
     private frameCount: number
@@ -18,7 +20,10 @@ class Structure {
         this.bind()
         this.frameCount = 0
         this.pieces = []
+        this.texLoader = new THREE.TextureLoader()
+        this.glbLoader = new GLTFLoader()
         this.structureGroup = new THREE.Group()
+        this.rotator = new THREE.Group()
         this.corners = [
             {
                 piece: Math.round(Math.random()),
@@ -57,18 +62,28 @@ class Structure {
 
     init(scene: THREE.Scene) {
         this.scene = scene
-        this.scene.add(this.structureGroup)
+        this.scene.add(this.rotator)
+        this.rotator.add(this.structureGroup)
+        this.structureGroup.rotateZ(Math.PI / 4)
 
-        this.glbLoader = new GLTFLoader()
+        const matcapTex = this.texLoader.load("/textures/black-metal-matcap.png")
+        matcapTex.colorSpace = THREE.SRGBColorSpace
+
+        const blackMetalMat = new THREE.MeshMatcapMaterial({
+            matcap: matcapTex
+        })
+
         this.glbLoader.load("/models/tatsuya-pieces.glb", glb => {
             glb.scene.traverse(child => {
                 if (child instanceof THREE.Mesh) {
-                    child.material = new THREE.MeshNormalMaterial()
+                    child.material = blackMetalMat
                     this.pieces.push(child)
                 }
             })
             this.generateStructure()
         })
+
+        // this.scene.add(new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshNormalMaterial()))
 
     }
 
@@ -95,7 +110,7 @@ class Structure {
             this.computeCorners()
         }
 
-        this.structureGroup.rotateX(-0.007)
+        this.rotator.rotateX(-0.007)
     }
 
     private bind() {

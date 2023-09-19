@@ -40,9 +40,6 @@ class MainThreeScene {
             }
         }
 
-
-        
-
         Structure.init(this.scene)
 
         // RENDER LOOP AND WINDOW SIZE UPDATER SETUP
