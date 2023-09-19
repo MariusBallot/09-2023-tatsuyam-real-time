@@ -110,7 +110,7 @@ class Structure {
             this.computeCorners()
         }
 
-        this.rotator.rotateX(-0.007)
+        this.rotator.rotateX(0.007)
     }
 
     private bind() {
